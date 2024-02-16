@@ -1,0 +1,30 @@
+name: "Magio TV Server"
+description: "Magio TV server to provide playlist and xmltv epg"
+version: "0.5.31"
+slug: "magio_tv_server"
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+startup: services
+ports:
+  5000/tcp: 5000
+options:
+  user_name: ""
+  password: ""
+  "host_address": "http://:[port]"
+  "tv_guide_days": 7
+  "tv_guide_refresh_hours": 12
+  quality: HIGH
+  debug: true
+schema:
+  user_name: str
+  password: str
+  "host_address": str
+  "tv_guide_days": int
+  "tv_guide_refresh_hours": int
+  quality: str
+  debug: bool
