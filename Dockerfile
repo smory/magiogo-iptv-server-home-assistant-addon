@@ -1,32 +1,36 @@
-
-ARG BUILD_FROM=hassioaddons/base-python:13.1.2
-# hadolint ignore=DL3006
-FROM ${BUILD_FROM}
+ARG BUILD_FROM
+FROM $BUILD_FROM
 
 # Set shell
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 # Copy Python requirements file
 COPY requirements.txt /tmp/
-#COPY app.py /
 
 # Setup base
 # Install requirements for add-on
-RUN \
-\
-    apk add --no-cache --virtual .build-dependencies \
-        build-base=0.5-r3 \
-        git=2.43.0-r0 \
-        py3-wheel=0.42.0-r0 \
-        python3-dev=3.11.6-r1 \
-    \
-    && apk add --no-cache \
- #       py3-bcrypt=4.1.1-r0 \
- #       py3-cryptography=41.0.7-r0 \
+RUN apk add --no-cache --virtual .build-dependencies git=2.43.0-r0 python3-dev=3.11.8-r0
+
+RUN apk add --no-cache \
         py3-pip=23.3.1-r0 \
-        python3=3.11.6-r1 \
-    && pip install --upgrade pip==23.0.1 --break-system-packages \
-    && pip install -r /tmp/requirements.txt --break-system-packages
+        python3=3.11.8-r0
+RUN pip install --upgrade pip==23.0.1 --break-system-packages
+RUN pip install -r /tmp/requirements.txt --break-system-packages
+
+RUN git clone -b home_assistant https://github.com/smory/magiogo-iptv-server.git
+RUN mkdir /app
+RUN mkdir -p /data/storage
+RUN mv magiogo-iptv-server/app.py /app/
+RUN mv magiogo-iptv-server/client.py /app/
+RUN mv magiogo-iptv-server/magiogo.py /app/
+RUN mv magiogo-iptv-server/parse_season_number.py /app/
+RUN mv magiogo-iptv-server/mpd_helper.py /app/
+RUN mv magiogo-iptv-server/templates /app/
+RUN mv magiogo-iptv-server/public /data/
+
+RUN rmdir --ignore-fail-on-non-empty magiogo-iptv-server
+
+RUN apk del --no-cache --purge .build-dependencies
 
 COPY run.sh /
 

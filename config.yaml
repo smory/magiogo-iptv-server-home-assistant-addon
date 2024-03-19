@@ -1,6 +1,6 @@
 name: "Magio TV Server"
 description: "Magio TV server to provide playlist and xmltv epg"
-version: "0.5.31"
+version: "1.0.1"
 slug: "magio_tv_server"
 init: false
 arch:
@@ -10,21 +10,36 @@ arch:
   - armv7
   - i386
 startup: services
+webui: http://[HOST]:[PORT:5000]/
 ports:
   5000/tcp: 5000
 options:
   user_name: ""
   password: ""
-  "host_address": "http://:[port]"
-  "tv_guide_days": 7
-  "tv_guide_refresh_hours": 12
+  host_address: "http://[ip]:[port]"
+  tv_guide_days: 7
+  tv_guide_refresh_hours: 12
   quality: HIGH
-  debug: true
+  ott_type_for_steaming: "OTT_STB"
+  stream_service_type: LIVE
+  use_higher_bitrate_dash: false
+  remove_smaller_quality_streams_from_dash: false
+  add_kodi_props_to_playlist: false
+  kodi_props: "#KODIPROP:inputstreamaddon=inputstream.ffmpegdirect%%new_line%%#KODIPROP:inputstream.ffmpegdirect.manifest_type=mpd%%new_line%%#KODIPROP:inputstream.ffmpegdirect.is_realtime_stream=true%%new_line%%#KODIPROP:inputstream.ffmpegdirect.manifest_type=application/dash+xml%%new_line%%"
+  make_dash_local_manifest_insead_of_redirect: false
+  debug: false
 schema:
   user_name: str
   password: str
-  "host_address": str
-  "tv_guide_days": int
-  "tv_guide_refresh_hours": int
+  host_address: str
+  tv_guide_days: int
+  tv_guide_refresh_hours: int
   quality: str
+  ott_type_for_steaming: str
+  stream_service_type: str
+  use_higher_bitrate_dash: bool
+  remove_smaller_quality_streams_from_dash: bool
+  add_kodi_props_to_playlist: bool
+  kodi_props: str
+  make_dash_local_manifest_insead_of_redirect: bool
   debug: bool
